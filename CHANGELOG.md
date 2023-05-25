@@ -11,3 +11,6 @@ This is an alpha version! The changes listed here are not final.
 
 ### Added
 - Create package for the boost score bar API
+
+### Fixed
+- Correct typo in README.md.
