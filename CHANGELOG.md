@@ -12,6 +12,9 @@ This is an alpha version! The changes listed here are not final.
 ### Added
 - Add tests
 
+### Changed
+- Updated package dependencies.
+
 ## 0.1.0 - 2023-05-29
 ### Added
 - Create package for the boost score bar API [#30781]
