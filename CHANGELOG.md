@@ -12,6 +12,9 @@ This is an alpha version! The changes listed here are not final.
 ### Changed
 - Updated package dependencies.
 
+### Fixed
+- Fix type declarations for vars holding returns from `setTimeout`, `setInterval`.
+
 ## [0.1.3] - 2023-07-05
 ### Changed
 - Updated package dependencies. [#31659]
