@@ -8,20 +8,4 @@
  * @param {DefaultType} defaultValue - Default value to return if not a number.
  * @returns {number | DefaultType} value as a number, of defaultValue.
  */
-export function castToNumber< DefaultType = number >(
-	value: unknown,
-	defaultValue: DefaultType = undefined
-): number | DefaultType {
-	if ( typeof value === 'number' ) {
-		return value;
-	}
-
-	if ( typeof value === 'string' ) {
-		const float = parseFloat( value );
-		if ( ! isNaN( float ) ) {
-			return float;
-		}
-	}
-
-	return defaultValue;
-}
+export declare function castToNumber<DefaultType = number>(value: unknown, defaultValue?: DefaultType): number | DefaultType;
