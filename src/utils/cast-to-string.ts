@@ -8,4 +8,21 @@
  * @param {DefaultType} defaultValue - Default value to return if not a string
  * @returns {string | DefaultType} value as a string, of defaultValue.
  */
-export declare function castToString<DefaultType = undefined>(value: unknown, defaultValue?: DefaultType | undefined): string | DefaultType | undefined;
+export function castToString< DefaultType = undefined >(
+	value: unknown,
+	defaultValue: DefaultType | undefined = undefined
+): string | DefaultType | undefined {
+	if ( typeof value === 'string' ) {
+		return value;
+	}
+
+	if ( ! value ) {
+		return defaultValue;
+	}
+
+	if ( value.toString instanceof Function ) {
+		return value.toString();
+	}
+
+	return defaultValue;
+}
