@@ -85,4 +85,11 @@ export declare function didScoresChange(scores: SpeedScoresSet): boolean;
  * @returns {number} - The change in scores in percentage.
  */
 export declare function getScoreMovementPercentage(scores: SpeedScoresSet): number;
+/**
+ * Determine the number of days since the last timestamp.
+ *
+ * @param {number} timestamp - the timestamp returned by the server.
+ * @returns {number} - The number of days.
+ */
+export declare function calculateDaysSince(timestamp: number): number;
 export {};
