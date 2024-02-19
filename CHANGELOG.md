@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 This is an alpha version! The changes listed here are not final.
 
+### Changed
+- Update build configuration to better match supported target environments.
+
 ## [0.1.22] - 2024-02-13
 ### Changed
 - Updated package dependencies. [#35608]
