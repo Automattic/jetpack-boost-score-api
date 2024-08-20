@@ -44,11 +44,11 @@ interface SpeedHistoryResponse {
  * Kick off a request to generate speed scores for this site. Will automatically
  * poll for a response until the task is done, returning a SpeedScores object.
  *
- * @param {boolean} force - Force regenerate speed scores.
- * @param {string} rootUrl - Root URL for the HTTP request.
- * @param {string} siteUrl - URL of the site.
- * @param {string} nonce - Nonce to use for authentication.
- * @returns {SpeedScoresSet} Speed scores returned by the server.
+ * @param {boolean} force   - Force regenerate speed scores.
+ * @param {string}  rootUrl - Root URL for the HTTP request.
+ * @param {string}  siteUrl - URL of the site.
+ * @param {string}  nonce   - Nonce to use for authentication.
+ * @return {SpeedScoresSet} Speed scores returned by the server.
  */
 export declare function requestSpeedScores(force: boolean, rootUrl: string, siteUrl: string, nonce: string): Promise<SpeedScoresSet>;
 /**
@@ -57,8 +57,8 @@ export declare function requestSpeedScores(force: boolean, rootUrl: string, site
  *
  * @param {string} rootUrl - Root URL for the HTTP request.
  * @param {string} siteUrl - URL of the site.
- * @param {string} nonce - Nonce to use for authentication.
- * @returns {SpeedHistoryResponse} Speed score history returned by the server.
+ * @param {string} nonce   - Nonce to use for authentication.
+ * @return {SpeedHistoryResponse} Speed score history returned by the server.
  */
 export declare function requestSpeedScoresHistory(rootUrl: string, siteUrl: string, nonce: string): Promise<SpeedHistoryResponse>;
 /**
@@ -67,7 +67,7 @@ export declare function requestSpeedScoresHistory(rootUrl: string, siteUrl: stri
  *
  * @param {number} mobile  - Mobile speed score
  * @param {number} desktop - Desktop speed score
- * @returns {string} letter score
+ * @return {string} letter score
  */
 export declare function getScoreLetter(mobile: number, desktop: number): string;
 /**
@@ -75,21 +75,21 @@ export declare function getScoreLetter(mobile: number, desktop: number): string;
  * The message varies depending on the results of the speed scores so lets modify this
  *
  * @param {SpeedScoresSet} scores - Speed scores returned by the server.
- * @returns {boolean} true if scores changed.
+ * @return {boolean} true if scores changed.
  */
 export declare function didScoresChange(scores: SpeedScoresSet): boolean;
 /**
  * Determine the change in scores to pass through to other functions.
  *
  * @param {SpeedScoresSet} scores - Speed scores returned by the server.
- * @returns {number} - The change in scores in percentage.
+ * @return {number} - The change in scores in percentage.
  */
 export declare function getScoreMovementPercentage(scores: SpeedScoresSet): number;
 /**
  * Determine the number of days since the last timestamp.
  *
  * @param {number} timestamp - the timestamp returned by the server.
- * @returns {number} - The number of days.
+ * @return {number} - The number of days.
  */
 export declare function calculateDaysSince(timestamp: number): number;
 export {};

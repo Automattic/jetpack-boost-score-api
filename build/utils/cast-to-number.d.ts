@@ -6,6 +6,6 @@
  * @template DefaultType
  * @param {*}           value        - External value to process as a number
  * @param {DefaultType} defaultValue - Default value to return if not a number.
- * @returns {number | DefaultType} value as a number, of defaultValue.
+ * @return {number | DefaultType} value as a number, of defaultValue.
  */
 export declare function castToNumber<DefaultType = number>(value: unknown, defaultValue?: DefaultType): number | DefaultType;

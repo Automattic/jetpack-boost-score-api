@@ -12,7 +12,7 @@ export type JSONValue = string | number | boolean | JSONObject | JSONArray | nul
  * Returns true if the given JSONValue is a JSONObject.
  *
  * @param {JSONValue} value - Value to check.
- * @returns {boolean} True if the given value is a JSONObject.
+ * @return {boolean} True if the given value is a JSONObject.
  */
 export declare function isJsonObject(value: JSONValue): value is JSONObject;
 /**
@@ -20,6 +20,6 @@ export declare function isJsonObject(value: JSONValue): value is JSONObject;
  * Sure, you could use x instanceof Array but this is shorter and more consistent.
  *
  * @param {JSONValue} value - Value to check.
- * @returns {boolean} True if the given value is a JSONArray.
+ * @return {boolean} True if the given value is a JSONArray.
  */
 export declare function isJsonArray(value: JSONValue): value is JSONArray;
