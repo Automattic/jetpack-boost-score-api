@@ -5,12 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.13-alpha] - unreleased
-
-This is an alpha version! The changes listed here are not final.
-
+## [1.0.13] - 2025-09-08
 ### Changed
-- Update package dependencies.
+- Update package dependencies. [#45027] [#45097]
 
 ## [1.0.12] - 2025-08-25
 ### Changed
@@ -342,7 +339,7 @@ This is an alpha version! The changes listed here are not final.
 ### Added
 - Create package for the boost score bar API [#30781]
 
-[1.0.13-alpha]: https://github.com/Automattic/jetpack-boost-score-api/compare/v1.0.12...v1.0.13-alpha
+[1.0.13]: https://github.com/Automattic/jetpack-boost-score-api/compare/v1.0.12...v1.0.13
 [1.0.12]: https://github.com/Automattic/jetpack-boost-score-api/compare/v1.0.11...v1.0.12
 [1.0.11]: https://github.com/Automattic/jetpack-boost-score-api/compare/v1.0.10...v1.0.11
 [1.0.10]: https://github.com/Automattic/jetpack-boost-score-api/compare/v1.0.9...v1.0.10
