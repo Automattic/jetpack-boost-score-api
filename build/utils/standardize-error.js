@@ -1,0 +1,31 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.standardizeError = standardizeError;
+/**
+ * JavaScript offers no guarantee that caught objects in catch blocks are actually
+ * Error objects. This method fixes that, for type safety. :)
+ *
+ * @param {*}               data           - Any thrown error data to interpret as an Error (or subclass)
+ * @param {JSONValue|Error} defaultMessage - A default message to throw if no sensible error can be found.
+ * @return {Error} the data guaranteed to be an Error or subclass thereof.
+ */
+function standardizeError(data, defaultMessage) {
+    if (data instanceof Error) {
+        return data;
+    }
+    if (typeof data === 'string' || data instanceof String) {
+        return new Error(data.toString());
+    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (data.message) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        return new Error(data.message);
+    }
+    if (defaultMessage) {
+        return new Error(defaultMessage);
+    }
+    return new Error(JSON.stringify(data));
+}
+//# sourceMappingURL=standardize-error.js.map

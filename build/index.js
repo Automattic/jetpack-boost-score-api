@@ -1,4 +1,207 @@
-!function(e,t){"object"==typeof exports&&"object"==typeof module?module.exports=t():"function"==typeof define&&define.amd?define([],t):"object"==typeof exports?exports.BoostScoreApiLibrary=t():e.BoostScoreApiLibrary=t()}(self,()=>(()=>{"use strict";var e={436(e,t,r){r.d(t,{h:()=>i});var o=r(723),s=r(714),n=r(755);const __=o.__;class i extends Error{constructor(e,t,r){super(),this.httpCode=e,this.body=t,this.parseError=r}get message(){switch(this.httpCode){case 403:return this.getRestApiErrorMessage();case 200:if(this.parseError)return(0,o.sprintf)(/* Translators: %s refers to a browser-supplied error message (hopefully already in the right language) */
-__("Received invalid response while communicating with your WordPress site: %s","boost-score-api"),this.parseError.message)}return(0,o.sprintf)(/* Translators: %d refers to numeric HTTP error code */
-__("HTTP %d error received while communicating with the server.","boost-score-api"),this.httpCode)}getDisplayBody(){return(0,n.O)(this.body)?JSON.stringify(this.body,null,"  "):(0,s.w)(this.body,"").substring(0,1e3)}getRestApiErrorMessage(){return __("Your site's REST API does not seem to be accessible. Jetpack Boost requires access to your REST API in order to receive site performance scores. Please make sure that your site's REST API is active and accessible, and try again.","boost-score-api")}}},215(e,t,r){r.d(t,{A:()=>a});var o=r(723),s=r(436),n=r(213);const __=o.__;async function i(e,t,r,s=null,i){const c={method:e,mode:"cors",headers:{"X-WP-Nonce":i}};"post"!==e&&"delete"!==e||!s||(c.body=JSON.stringify(s),c.headers["Content-Type"]="application/json");const a=function(e,t){return t+n.K+n.L+e}(r,t);let u;try{u=await fetch(a,c)}catch(e){const t=c;delete t.body,delete t.headers["X-WP-Nonce"];const r={requestInitiator:window.location.href,requestUrl:a,requestArgs:t,originalErrorMessage:e.toString()};throw new Error((0,o.sprintf)(/* Translators: %s refers to a string representation of an error object containing useful debug information  */
-__("An error occurred while trying to communicate with the site REST API. Extra debug info: %s","boost-score-api"),JSON.stringify(r)),{cause:e})}return u}async function c(e,t,r,o=null,n){const c=await i(e,t,r,o,n);let a,u;try{a=await c.text()}catch(e){throw new s.h(c.status,null,e)}try{u=JSON.parse(a)}catch(e){throw new s.h(c.status,a,e)}if(!c.ok)throw new s.h(c.status,u,null);return u}const a={get:function(e,t,r){return c("get",e,t,null,r)},post:function(e,t,r=null,o){return c("post",e,t,r,o)}}},213(e,t,r){r.d(t,{K:()=>o,L:()=>s});const o="jetpack-boost/v1",s=""},198(e,t,r){function o(e,t=void 0){if("number"==typeof e)return e;if("string"==typeof e){const t=parseFloat(e);if(!isNaN(t))return t}return t}r.d(t,{G:()=>o})},714(e,t,r){function o(e,t=void 0){return"string"==typeof e?e:e&&e.toString instanceof Function?e.toString():t}r.d(t,{w:()=>o})},755(e,t,r){function o(e){return!!e&&e instanceof Object&&!(e instanceof Array)}r.d(t,{O:()=>o})},456(e,t,r){r.d(t,{A:()=>s});var o=r(723);const __=o.__;async function s({interval:e,callback:t,timeout:r,timeoutError:o}){let s,n;return new Promise((i,c)=>{s=setTimeout(()=>{c(new Error(o||__("Timed out","boost-score-api")))},r||12e4),n=setInterval(async()=>{try{await Promise.resolve(t(i))}catch(e){c(e)}},e)}).finally(()=>{clearTimeout(s),clearInterval(n)})}},95(e,t,r){function o(e,t){return e instanceof Error?e:"string"==typeof e||e instanceof String?new Error(e.toString()):e.message?new Error(e.message):t?new Error(t):new Error(JSON.stringify(e))}r.d(t,{g:()=>o})},723(e){e.exports=window.wp.i18n}},t={};function r(o){var s=t[o];if(void 0!==s)return s.exports;var n=t[o]={exports:{}};return e[o](n,n.exports,r),n.exports}r.n=e=>{var t=e&&e.__esModule?()=>e.default:()=>e;return r.d(t,{a:t}),t},r.d=(e,t)=>{for(var o in t)r.o(t,o)&&!r.o(e,o)&&Object.defineProperty(e,o,{enumerable:!0,get:t[o]})},r.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t),r.r=e=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})};var o={};r.r(o),r.d(o,{calculateDaysSince:()=>m,didScoresChange:()=>g,getScoreLetter:()=>w,getScoreMovementPercentage:()=>b,requestSpeedScores:()=>f,requestSpeedScoresHistory:()=>y});var s=r(723),n=r(215),i=r(198),c=r(714),a=r(755),u=r(456),l=r(95);const __=s.__,d=12e4,p=5e3;async function f(e=!1,t,r,o){const s=h(await n.A.post(t,e?"/speed-scores/refresh":"/speed-scores",{url:r},o));return s.scores?s.scores:await async function(e,t,r){return(0,u.A)({timeout:d,interval:p,timeoutError:__("Timed out while waiting for speed-score.","boost-score-api"),callback:async o=>{const s=h(await n.A.post(e,"/speed-scores",{url:t},r));s.scores&&o(s.scores)}})}(t,r,o)}async function y(e,t,r){const o=(new Date).getTime(),s=o-2592e6;return await n.A.post(e,"/speed-scores-history",{start:s,end:o},r)}function h(e){if(e.error){const t=__("An unknown error occurred while requesting metrics","boost-score-api");throw(0,l.g)(e.error,t)}if((0,a.O)(e.scores))return{status:"success",scores:{current:(0,a.O)(e.scores.current)?{mobile:(0,i.G)(e.scores.current.mobile,0),desktop:(0,i.G)(e.scores.current.desktop,0)}:{mobile:0,desktop:0},noBoost:(0,a.O)(e.scores.noBoost)?{mobile:(0,i.G)(e.scores.noBoost.mobile,0),desktop:(0,i.G)(e.scores.noBoost.desktop,0)}:null,isStale:!!e.scores.isStale}};const t=(0,c.w)(e.status);if(!t)throw new Error(__("Invalid response while requesting metrics","boost-score-api"));return{status:t}}function w(e,t){const r=(e+t)/2;return r>90?"A":r>75?"B":r>50?"C":r>35?"D":r>25?"E":"F"}function g(e){const t=e.current,r=e.noBoost;return null!=t&&null!=r&&(t.mobile!==r.mobile||t.desktop!==r.desktop)}function b(e){const t=e.current,r=e.noBoost;if(null!==t&&null!==r){const t=(e.current.mobile+e.current.desktop)/(e.noBoost.mobile+e.noBoost.desktop)-1;return Math.round(100*t)}return 0}function m(e){const t=new Date(e),r=(new Date).valueOf()-t.valueOf();return Math.floor(r/864e5)}return o})());
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.requestSpeedScores = requestSpeedScores;
+exports.requestSpeedScoresHistory = requestSpeedScoresHistory;
+exports.getScoreLetter = getScoreLetter;
+exports.didScoresChange = didScoresChange;
+exports.getScoreMovementPercentage = getScoreMovementPercentage;
+exports.calculateDaysSince = calculateDaysSince;
+const i18n_1 = require("@wordpress/i18n");
+const api_1 = __importDefault(require("./api"));
+const cast_to_number_1 = require("./utils/cast-to-number");
+const cast_to_string_1 = require("./utils/cast-to-string");
+const json_types_1 = require("./utils/json-types");
+const poll_promise_1 = __importDefault(require("./utils/poll-promise"));
+const standardize_error_1 = require("./utils/standardize-error");
+const pollTimeout = 2 * 60 * 1000;
+const pollInterval = 5 * 1000;
+/**
+ * Kick off a request to generate speed scores for this site. Will automatically
+ * poll for a response until the task is done, returning a SpeedScores object.
+ *
+ * @param {boolean} force   - Force regenerate speed scores.
+ * @param {string}  rootUrl - Root URL for the HTTP request.
+ * @param {string}  siteUrl - URL of the site.
+ * @param {string}  nonce   - Nonce to use for authentication.
+ * @return {SpeedScoresSet} Speed scores returned by the server.
+ */
+async function requestSpeedScores(force = false, rootUrl, siteUrl, nonce) {
+    // Request metrics
+    const response = parseResponse(await api_1.default.post(rootUrl, force ? '/speed-scores/refresh' : '/speed-scores', { url: siteUrl }, nonce));
+    // If the response contains ready-to-use metrics, we're done here.
+    if (response.scores) {
+        return response.scores;
+    }
+    // Poll for metrics.
+    return await pollRequest(rootUrl, siteUrl, nonce);
+}
+/**
+ * Get SpeedScores gistory to render the Graph.  Will automatically
+ * poll for a response until the task is done, returning a SpeedHistory object.
+ *
+ * @param {string} rootUrl - Root URL for the HTTP request.
+ * @param {string} siteUrl - URL of the site.
+ * @param {string} nonce   - Nonce to use for authentication.
+ * @return {SpeedHistoryResponse} Speed score history returned by the server.
+ */
+async function requestSpeedScoresHistory(rootUrl, siteUrl, nonce) {
+    const end = new Date().getTime();
+    const start = end - 1000 * 60 * 60 * 24 * 30; // 30 days ago
+    // Request metrics
+    const response = await api_1.default.post(rootUrl, '/speed-scores-history', { start, end }, nonce);
+    return response;
+}
+/**
+ * Helper method for parsing a response from a speed score API request. Returns
+ * scores (if ready), and a status (success|pending|error).
+ *
+ * @param {JSONObject} response - API response to parse
+ * @return {ParsedApiResponse} API response, processed.
+ */
+function parseResponse(response) {
+    // Handle an explicit error
+    if (response.error) {
+        const defaultErrorMessage = (0, i18n_1.__)('An unknown error occurred while requesting metrics', 'boost-score-api');
+        throw (0, standardize_error_1.standardizeError)(response.error, defaultErrorMessage);
+    }
+    // Check if ready.
+    if ((0, json_types_1.isJsonObject)(response.scores)) {
+        return {
+            status: 'success',
+            scores: {
+                current: (0, json_types_1.isJsonObject)(response.scores.current)
+                    ? {
+                        mobile: (0, cast_to_number_1.castToNumber)(response.scores.current.mobile, 0),
+                        desktop: (0, cast_to_number_1.castToNumber)(response.scores.current.desktop, 0),
+                    }
+                    : {
+                        mobile: 0,
+                        desktop: 0,
+                    },
+                noBoost: (0, json_types_1.isJsonObject)(response.scores.noBoost)
+                    ? {
+                        mobile: (0, cast_to_number_1.castToNumber)(response.scores.noBoost.mobile, 0),
+                        desktop: (0, cast_to_number_1.castToNumber)(response.scores.noBoost.desktop, 0),
+                    }
+                    : null,
+                isStale: !!response.scores.isStale,
+            },
+        };
+    }
+    const requestStatus = (0, cast_to_string_1.castToString)(response.status);
+    if (!requestStatus) {
+        throw new Error((0, i18n_1.__)('Invalid response while requesting metrics', 'boost-score-api'));
+    }
+    return {
+        status: requestStatus,
+    };
+}
+/**
+ * Poll a speed score request for results, timing out if it takes too long.
+ *
+ * @param {string} rootUrl - Root URL of the site to request metrics for
+ * @param {string} siteUrl - Site URL to request metrics for
+ * @param {string} nonce   - Nonce to use for authentication
+ * @return {SpeedScoresSet} Speed scores returned by the server.
+ */
+async function pollRequest(rootUrl, siteUrl, nonce) {
+    return (0, poll_promise_1.default)({
+        timeout: pollTimeout,
+        interval: pollInterval,
+        timeoutError: (0, i18n_1.__)('Timed out while waiting for speed-score.', 'boost-score-api'),
+        callback: async (resolve) => {
+            const response = parseResponse(await api_1.default.post(rootUrl, '/speed-scores', { url: siteUrl }, nonce));
+            if (response.scores) {
+                resolve(response.scores);
+            }
+        },
+    });
+}
+/**
+ * Given a mobile and desktop score, return a letter summarizing the overall
+ * score.
+ *
+ * @param {number} mobile  - Mobile speed score
+ * @param {number} desktop - Desktop speed score
+ * @return {string} letter score
+ */
+function getScoreLetter(mobile, desktop) {
+    const sum = mobile + desktop;
+    const averageScore = sum / 2;
+    if (averageScore > 90) {
+        return 'A';
+    }
+    if (averageScore > 75) {
+        return 'B';
+    }
+    if (averageScore > 50) {
+        return 'C';
+    }
+    if (averageScore > 35) {
+        return 'D';
+    }
+    if (averageScore > 25) {
+        return 'E';
+    }
+    return 'F';
+}
+/**
+ * Find out if site scores changed. We fire a popout modal if they improve or worsen.
+ * The message varies depending on the results of the speed scores so lets modify this
+ *
+ * @param {SpeedScoresSet} scores - Speed scores returned by the server.
+ * @return {boolean} true if scores changed.
+ */
+function didScoresChange(scores) {
+    const current = scores.current;
+    const noBoost = scores.noBoost;
+    // lets make this a little bit more readable. If one of the scores is null.
+    // then the scores haven't changed. So return false.
+    if (null == current || null == noBoost) {
+        return false;
+    }
+    // if either the mobile or the desktop scores have changed. Return true.
+    if (current.mobile !== noBoost.mobile || current.desktop !== noBoost.desktop) {
+        return true;
+    }
+    //else if reach here then the scores are the same.
+    return false;
+}
+/**
+ * Determine the change in scores to pass through to other functions.
+ *
+ * @param {SpeedScoresSet} scores - Speed scores returned by the server.
+ * @return {number} - The change in scores in percentage.
+ */
+function getScoreMovementPercentage(scores) {
+    const current = scores.current;
+    const noBoost = scores.noBoost;
+    if (current !== null && noBoost !== null) {
+        const currentScore = scores.current.mobile + scores.current.desktop;
+        const noBoostScore = scores.noBoost.mobile + scores.noBoost.desktop;
+        const change = currentScore / noBoostScore - 1;
+        return Math.round(change * 100);
+    }
+    return 0;
+}
+/**
+ * Determine the number of days since the last timestamp.
+ *
+ * @param {number} timestamp - the timestamp returned by the server.
+ * @return {number} - The number of days.
+ */
+function calculateDaysSince(timestamp) {
+    // Create Date objects for the provided timestamp and the current date
+    const providedDate = new Date(timestamp);
+    const currentDate = new Date();
+    // Calculate the difference in milliseconds between the two dates
+    const differenceInMilliseconds = currentDate.valueOf() - providedDate.valueOf();
+    // Convert milliseconds to days
+    const millisecondsInADay = 24 * 60 * 60 * 1000;
+    const differenceInDays = Math.floor(differenceInMilliseconds / millisecondsInADay);
+    return differenceInDays;
+}
+//# sourceMappingURL=index.js.map
