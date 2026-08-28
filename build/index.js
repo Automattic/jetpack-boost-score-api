@@ -16,7 +16,11 @@ const cast_to_string_1 = require("./utils/cast-to-string");
 const json_types_1 = require("./utils/json-types");
 const poll_promise_1 = __importDefault(require("./utils/poll-promise"));
 const standardize_error_1 = require("./utils/standardize-error");
-const pollTimeout = 2 * 60 * 1000;
+// Four minutes covers the large majority of successful runs, including queue
+// and poll overhead. Over the seven days to 26 August 2026, about 0.9% of
+// production runs took longer than two minutes and about 0.04% took longer
+// than four. A timeout here therefore does not mean the run failed.
+const pollTimeout = 4 * 60 * 1000;
 const pollInterval = 5 * 1000;
 /**
  * Kick off a request to generate speed scores for this site. Will automatically

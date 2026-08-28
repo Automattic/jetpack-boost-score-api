@@ -22,7 +22,7 @@ async function pollPromise({ interval, callback, timeout, timeoutError, }) {
     return new Promise((resolve, reject) => {
         timeoutHandle = setTimeout(() => {
             reject(new Error(timeoutError || (0, i18n_1.__)('Timed out', 'boost-score-api')));
-        }, timeout || 2 * 60 * 1000);
+        }, timeout);
         intervalHandle = setInterval(async () => {
             try {
                 await Promise.resolve(callback(resolve));
