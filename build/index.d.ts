@@ -1,3 +1,5 @@
+import { standardizeError } from './utils/standardize-error';
+export { standardizeError };
 type SpeedScores = {
     mobile: number;
     desktop: number;
@@ -92,4 +94,3 @@ export declare function getScoreMovementPercentage(scores: SpeedScoresSet): numb
  * @return {number} - The number of days.
  */
 export declare function calculateDaysSince(timestamp: number): number;
-export {};
