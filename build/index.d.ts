@@ -43,16 +43,20 @@ interface SpeedHistoryResponse {
     };
 }
 /**
- * Kick off a request to generate speed scores for this site. Will automatically
- * poll for a response until the task is done, returning a SpeedScores object.
+ * Request speed scores for this site, polling until completion or cancellation.
  *
- * @param {boolean} force   - Force regenerate speed scores.
- * @param {string}  rootUrl - Root URL for the HTTP request.
- * @param {string}  siteUrl - URL of the site.
- * @param {string}  nonce   - Nonce to use for authentication.
- * @return {SpeedScoresSet} Speed scores returned by the server.
+ * @param {boolean}     force          - Force regenerate speed scores.
+ * @param {string}      rootUrl        - Root URL for the HTTP request.
+ * @param {string}      siteUrl        - URL of the site.
+ * @param {string}      nonce          - Nonce to use for authentication.
+ * @param {object}      options        - Request options.
+ * @param {AbortSignal} options.signal - Stop polling without aborting an in-flight HTTP request.
+ * @return {SpeedScoresSet | undefined} Speed scores, or undefined when aborted.
  */
-export declare function requestSpeedScores(force: boolean, rootUrl: string, siteUrl: string, nonce: string): Promise<SpeedScoresSet>;
+export declare function requestSpeedScores(force: boolean | undefined, rootUrl: string, siteUrl: string, nonce: string, options?: undefined): Promise<SpeedScoresSet>;
+export declare function requestSpeedScores(force: boolean | undefined, rootUrl: string, siteUrl: string, nonce: string, options?: {
+    signal?: AbortSignal;
+}): Promise<SpeedScoresSet | undefined>;
 /**
  * Get SpeedScores gistory to render the Graph.  Will automatically
  * poll for a response until the task is done, returning a SpeedHistory object.

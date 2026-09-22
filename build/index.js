@@ -24,25 +24,26 @@ Object.defineProperty(exports, "standardizeError", { enumerable: true, get: func
 // than four. A timeout here therefore does not mean the run failed.
 const pollTimeout = 4 * 60 * 1000;
 const pollInterval = 5 * 1000;
-/**
- * Kick off a request to generate speed scores for this site. Will automatically
- * poll for a response until the task is done, returning a SpeedScores object.
- *
- * @param {boolean} force   - Force regenerate speed scores.
- * @param {string}  rootUrl - Root URL for the HTTP request.
- * @param {string}  siteUrl - URL of the site.
- * @param {string}  nonce   - Nonce to use for authentication.
- * @return {SpeedScoresSet} Speed scores returned by the server.
- */
-async function requestSpeedScores(force = false, rootUrl, siteUrl, nonce) {
-    // Request metrics
-    const response = parseResponse(await api_1.default.post(rootUrl, force ? '/speed-scores/refresh' : '/speed-scores', { url: siteUrl }, nonce));
-    // If the response contains ready-to-use metrics, we're done here.
-    if (response.scores) {
-        return response.scores;
+async function requestSpeedScores(force = false, rootUrl, siteUrl, nonce, options) {
+    const signal = options?.signal;
+    if (signal?.aborted) {
+        return;
     }
-    // Poll for metrics.
-    return await pollRequest(rootUrl, siteUrl, nonce);
+    try {
+        const response = parseResponse(await api_1.default.post(rootUrl, force ? '/speed-scores/refresh' : '/speed-scores', { url: siteUrl }, nonce));
+        if (signal?.aborted) {
+            return;
+        }
+        if (response.scores) {
+            return response.scores;
+        }
+        return await pollRequest(rootUrl, siteUrl, nonce, signal);
+    }
+    catch (error) {
+        if (!signal?.aborted) {
+            throw error;
+        }
+    }
 }
 /**
  * Get SpeedScores gistory to render the Graph.  Will automatically
@@ -108,19 +109,27 @@ function parseResponse(response) {
 /**
  * Poll a speed score request for results, timing out if it takes too long.
  *
- * @param {string} rootUrl - Root URL of the site to request metrics for
- * @param {string} siteUrl - Site URL to request metrics for
- * @param {string} nonce   - Nonce to use for authentication
- * @return {SpeedScoresSet} Speed scores returned by the server.
+ * @param {string}      rootUrl - Root URL of the site to request metrics for
+ * @param {string}      siteUrl - Site URL to request metrics for
+ * @param {string}      nonce   - Nonce to use for authentication
+ * @param {AbortSignal} signal  - Signal to stop polling.
+ * @return {SpeedScoresSet | undefined} Speed scores, or undefined when aborted.
  */
-async function pollRequest(rootUrl, siteUrl, nonce) {
+async function pollRequest(rootUrl, siteUrl, nonce, signal) {
     return (0, poll_promise_1.default)({
         timeout: pollTimeout,
         interval: pollInterval,
         timeoutError: (0, i18n_1.__)('Timed out while waiting for speed-score.', 'boost-score-api'),
         callback: async (resolve) => {
+            if (signal?.aborted) {
+                resolve(undefined);
+                return;
+            }
             const response = parseResponse(await api_1.default.post(rootUrl, '/speed-scores', { url: siteUrl }, nonce));
-            if (response.scores) {
+            if (signal?.aborted) {
+                resolve(undefined);
+            }
+            else if (response.scores) {
                 resolve(response.scores);
             }
         },
