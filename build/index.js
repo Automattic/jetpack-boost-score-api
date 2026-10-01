@@ -37,6 +37,7 @@ async function requestSpeedScores(force = false, rootUrl, siteUrl, nonce, option
         if (response.scores) {
             return response.scores;
         }
+        options?.onPending?.();
         return await pollRequest(rootUrl, siteUrl, nonce, signal);
     }
     catch (error) {
