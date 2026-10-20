@@ -101,3 +101,11 @@ export declare function getScoreMovementPercentage(scores: SpeedScoresSet): numb
  * @return {number} - The number of days.
  */
 export declare function calculateDaysSince(timestamp: number): number;
+export type ScoreTier = 'good' | 'medium' | 'poor';
+/**
+ * The tier a speed score falls in.
+ *
+ * @param {number} score - Speed score, 0 to 100.
+ * @return {ScoreTier} The tier.
+ */
+export declare function getScoreTier(score: number): ScoreTier;

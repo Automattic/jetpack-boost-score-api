@@ -10,6 +10,7 @@ exports.getScoreLetter = getScoreLetter;
 exports.didScoresChange = didScoresChange;
 exports.getScoreMovementPercentage = getScoreMovementPercentage;
 exports.calculateDaysSince = calculateDaysSince;
+exports.getScoreTier = getScoreTier;
 const i18n_1 = require("@wordpress/i18n");
 const api_1 = __importDefault(require("./api"));
 const cast_to_number_1 = require("./utils/cast-to-number");
@@ -219,5 +220,20 @@ function calculateDaysSince(timestamp) {
     const millisecondsInADay = 24 * 60 * 60 * 1000;
     const differenceInDays = Math.floor(differenceInMilliseconds / millisecondsInADay);
     return differenceInDays;
+}
+/**
+ * The tier a speed score falls in.
+ *
+ * @param {number} score - Speed score, 0 to 100.
+ * @return {ScoreTier} The tier.
+ */
+function getScoreTier(score) {
+    if (score > 70) {
+        return 'good';
+    }
+    if (score > 50) {
+        return 'medium';
+    }
+    return 'poor';
 }
 //# sourceMappingURL=index.js.map
