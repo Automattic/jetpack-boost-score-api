@@ -12,6 +12,9 @@ This is an alpha version! The changes listed here are not final.
 ### Added
 - Add getScoreTier, which groups a speed score into good, medium or poor.
 
+### Changed
+- Update package dependencies.
+
 ## [1.2.3] - 2026-10-20
 ### Changed
 - Internal updates.
