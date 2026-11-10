@@ -39,7 +39,10 @@ async function requestSpeedScores(force = false, rootUrl, siteUrl, nonce, option
             return response.scores;
         }
         options?.onPending?.();
-        return await pollRequest(rootUrl, siteUrl, nonce, signal);
+        if (response.progress) {
+            options?.onProgress?.(response.progress);
+        }
+        return await pollRequest(rootUrl, siteUrl, nonce, signal, options?.onProgress);
     }
     catch (error) {
         if (!signal?.aborted) {
@@ -104,20 +107,25 @@ function parseResponse(response) {
     if (!requestStatus) {
         throw new Error((0, i18n_1.__)('Invalid response while requesting metrics', 'boost-score-api'));
     }
+    const progress = (0, json_types_1.isJsonObject)(response.progress) ? response.progress : {};
+    const elapsed = (0, cast_to_number_1.castToNumber)(progress.elapsed);
+    const expected = (0, cast_to_number_1.castToNumber)(progress.expected);
     return {
         status: requestStatus,
+        ...(elapsed !== undefined && expected && { progress: { elapsed, expected } }),
     };
 }
 /**
  * Poll a speed score request for results, timing out if it takes too long.
  *
- * @param {string}      rootUrl - Root URL of the site to request metrics for
- * @param {string}      siteUrl - Site URL to request metrics for
- * @param {string}      nonce   - Nonce to use for authentication
- * @param {AbortSignal} signal  - Signal to stop polling.
+ * @param {string}      rootUrl    - Root URL of the site to request metrics for
+ * @param {string}      siteUrl    - Site URL to request metrics for
+ * @param {string}      nonce      - Nonce to use for authentication
+ * @param {AbortSignal} signal     - Signal to stop polling.
+ * @param {Function}    onProgress - Called with the progress of each pending response.
  * @return {SpeedScoresSet | undefined} Speed scores, or undefined when aborted.
  */
-async function pollRequest(rootUrl, siteUrl, nonce, signal) {
+async function pollRequest(rootUrl, siteUrl, nonce, signal, onProgress) {
     return (0, poll_promise_1.default)({
         timeout: pollTimeout,
         interval: pollInterval,
@@ -133,6 +141,9 @@ async function pollRequest(rootUrl, siteUrl, nonce, signal) {
             }
             else if (response.scores) {
                 resolve(response.scores);
+            }
+            else if (response.progress) {
+                onProgress?.(response.progress);
             }
         },
     });

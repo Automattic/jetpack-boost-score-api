@@ -42,20 +42,26 @@ interface SpeedHistoryResponse {
         periods: SpeedHistoryPeriod[];
     };
 }
+export type SpeedScoreProgress = {
+    elapsed: number;
+    expected: number;
+};
 type SpeedScoresRequestOptions = {
     signal?: AbortSignal;
     onPending?: () => void;
+    onProgress?: (progress: SpeedScoreProgress) => void;
 };
 /**
  * Request speed scores for this site, polling until completion or cancellation.
  *
- * @param {boolean}     force             - Force regenerate speed scores.
- * @param {string}      rootUrl           - Root URL for the HTTP request.
- * @param {string}      siteUrl           - URL of the site.
- * @param {string}      nonce             - Nonce to use for authentication.
- * @param {object}      options           - Request options.
- * @param {AbortSignal} options.signal    - Stop polling without aborting an in-flight HTTP request.
- * @param {Function}    options.onPending - Called once if the site is still measuring, before polling starts.
+ * @param {boolean}     force              - Force regenerate speed scores.
+ * @param {string}      rootUrl            - Root URL for the HTTP request.
+ * @param {string}      siteUrl            - URL of the site.
+ * @param {string}      nonce              - Nonce to use for authentication.
+ * @param {object}      options            - Request options.
+ * @param {AbortSignal} options.signal     - Stop polling without aborting an in-flight HTTP request.
+ * @param {Function}    options.onPending  - Called once if the site is still measuring, before polling starts.
+ * @param {Function}    options.onProgress - Called with seconds elapsed and expected whenever the site is still measuring.
  * @return {SpeedScoresSet | undefined} Speed scores, or undefined when aborted.
  */
 export declare function requestSpeedScores(force: boolean | undefined, rootUrl: string, siteUrl: string, nonce: string, options?: undefined): Promise<SpeedScoresSet>;
