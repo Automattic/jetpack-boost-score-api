@@ -8,6 +8,7 @@ type SpeedScoresSet = {
     current: SpeedScores;
     noBoost: SpeedScores | null;
     isStale: boolean;
+    noBoostPending?: true;
 };
 interface ScoreValue {
     score: number;

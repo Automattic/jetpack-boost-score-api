@@ -100,6 +100,7 @@ function parseResponse(response) {
                     }
                     : null,
                 isStale: !!response.scores.isStale,
+                ...(response.scores.noBoostPending === true && { noBoostPending: true }),
             },
         };
     }

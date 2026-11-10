@@ -11,6 +11,7 @@ This is an alpha version! The changes listed here are not final.
 
 ### Added
 - Add an onProgress option that reports how far along a running speed test is.
+- Report when the comparison score without Boost is still being measured.
 
 ## [1.3.2] - 2026-11-04
 ### Changed
