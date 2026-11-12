@@ -25,6 +25,7 @@ Object.defineProperty(exports, "standardizeError", { enumerable: true, get: func
 // than four. A timeout here therefore does not mean the run failed.
 const pollTimeout = 4 * 60 * 1000;
 const pollInterval = 5 * 1000;
+const stages = ['queued', 'mobile', 'desktop'];
 async function requestSpeedScores(force = false, rootUrl, siteUrl, nonce, options) {
     const signal = options?.signal;
     if (signal?.aborted) {
@@ -108,13 +109,60 @@ function parseResponse(response) {
     if (!requestStatus) {
         throw new Error((0, i18n_1.__)('Invalid response while requesting metrics', 'boost-score-api'));
     }
-    const progress = (0, json_types_1.isJsonObject)(response.progress) ? response.progress : {};
-    const elapsed = (0, cast_to_number_1.castToNumber)(progress.elapsed);
-    const expected = (0, cast_to_number_1.castToNumber)(progress.expected);
     return {
         status: requestStatus,
-        ...(elapsed !== undefined && expected && { progress: { elapsed, expected } }),
+        ...parseProgress(response.progress),
     };
+}
+/**
+ * Parse the progress of a pending response, keeping only the fields the dashboard understands.
+ *
+ * @param {JSONValue} value - The `progress` member of a response.
+ * @return {object} `{ progress }`, or nothing when there is no usable estimate.
+ */
+function parseProgress(value) {
+    const reported = (0, json_types_1.isJsonObject)(value) ? value : {};
+    const elapsed = (0, cast_to_number_1.castToNumber)(reported.elapsed);
+    const expected = (0, cast_to_number_1.castToNumber)(reported.expected);
+    if (elapsed === undefined || !expected) {
+        return {};
+    }
+    const progress = { elapsed, expected };
+    const stage = (0, cast_to_string_1.castToString)(reported.stage);
+    if (isSpeedScoreStage(stage)) {
+        progress.stage = stage;
+    }
+    const scores = parseDeviceScores(reported.scores);
+    if (scores) {
+        progress.scores = scores;
+    }
+    return { progress };
+}
+/**
+ * Whether a value is one of the stages Boost Cloud reports.
+ *
+ * @param {string|undefined} value - The value to check.
+ * @return {boolean} True for a known stage.
+ */
+function isSpeedScoreStage(value) {
+    return stages.includes(value ?? '');
+}
+/**
+ * Parse the scores of the devices already measured, keeping only numeric ones.
+ *
+ * @param {JSONValue} value - The `scores` member of a response's progress.
+ * @return {object|undefined} Scores by device, or undefined when there are none.
+ */
+function parseDeviceScores(value) {
+    const reported = (0, json_types_1.isJsonObject)(value) ? value : {};
+    const scores = {};
+    for (const device of ['mobile', 'desktop']) {
+        const score = (0, cast_to_number_1.castToNumber)(reported[device]);
+        if (score !== undefined) {
+            scores[device] = score;
+        }
+    }
+    return Object.keys(scores).length ? scores : undefined;
 }
 /**
  * Poll a speed score request for results, timing out if it takes too long.

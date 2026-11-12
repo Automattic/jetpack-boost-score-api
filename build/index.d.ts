@@ -43,9 +43,16 @@ interface SpeedHistoryResponse {
         periods: SpeedHistoryPeriod[];
     };
 }
+declare const stages: readonly ['queued', 'mobile', 'desktop'];
+export type SpeedScoreStage = (typeof stages)[number];
 export type SpeedScoreProgress = {
     elapsed: number;
     expected: number;
+    stage?: SpeedScoreStage;
+    scores?: {
+        mobile?: number;
+        desktop?: number;
+    };
 };
 type SpeedScoresRequestOptions = {
     signal?: AbortSignal;
